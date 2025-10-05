@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Form & Feminine — Community Voices</title>
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --rose-blush:#D8B4D6; 
+  --deep-mauve:#B08BB0; 
+  --soft-pink:#F4E8F3; 
+  --charcoal:#2D2D2D; 
+  --warm-gray:#FAF5F7;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--warm-gray);color:var(--charcoal)}
+h1,h2,h3{font-family:'Playfair Display',serif;color:#6B4B8A}
+a{text-decoration:none;color:inherit}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid rgba(0,0,0,.06)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.logo{height:42px;border-radius:8px}
+nav ul{margin-left:auto;display:flex;gap:18px;list-style:none;padding:0}
+nav a:hover{color:var(--deep-mauve)}
+
+/* Header */
+.header{padding:80px 20px 40px;text-align:center;background:linear-gradient(135deg,#FAD0C4,#FFD1FF)}
+.header h1{margin:0 0 10px;font-size:2.2rem}
+.header p{max-width:760px;margin:0 auto}
+
+/* Main */
+.container{max-width:1100px;margin:0 auto;padding:30px 20px}
+.card{background:#fff;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.06);padding:22px}
+.grid{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:980px){.grid{grid-template-columns:380px 1fr}}
+
+/* Form */
+input,textarea,button{width:100%;font:inherit;border-radius:10px;border:1px solid #ddd;padding:12px}
+textarea{min-height:110px;resize:vertical}
+button{border:none;background:linear-gradient(135deg,var(--deep-mauve),var(--rose-blush));color:#fff;cursor:pointer}
+button:hover{filter:brightness(1.05);transform:translateY(-1px);transition:.2s}
+.helper{font-size:.9rem;color:#666;margin-top:8px}
+
+/* Gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.tile{background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.05);overflow:hidden}
+.tile img{width:100%;height:200px;object-fit:cover;display:block;transition:.5s}
+.tile img:hover{transform:scale(1.03)}
+.tile .meta{padding:12px}
+.tile .meta .cap{white-space:pre-wrap;margin:6px 0}
+.small{font-size:.9rem;color:#666}
+
+/* Comments */
+.comment{background:#fff0f5;border-radius:10px;padding:10px 12px;margin:8px 0}
+.comment::before{content:"🌸 ";}
+
+/* Toast */
+.toast{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+  background:#2d2d2d;color:#fff;padding:10px 14px;border-radius:999px;opacity:0;pointer-events:none;
+  transition:.3s
+}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html"><img class="logo" src="https://mocha-cdn.com/0198fd66-d2c5-7273-b090-41fdbbdca766/IMG_8854.jpeg" alt="Form & Feminine"></a>
+    <ul>
+      <li><a href="index.html#hero">Home</a></li>
+      <li><a href="community.html">Community Voices</a></li>
+      <li><a href="design.html">Design Sketches</a></li>
+      <li><a href="essays.html">Thoughtful Essays</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Header -->
+<header class="header">
+  <h1><i class="fa-solid fa-users"></i> Community Voices</h1>
+  <p>Share your thoughts, sketches, and short entries. Join the conversation and leave comments for others.</p>
+</header>
+
+<main class="container">
+  <div class="grid">
+    <!-- Upload form -->
+    <section class="card">
+      <h2>Post a voice</h2>
+      <form id="uploadForm">
+        <input id="uName" type="text" placeholder="Your name (optional)" />
+        <textarea id="uText" placeholder="Write your post here…" required></textarea>
+        <button type="submit">Publish</button>
+      </form>
+      <p class="helper">Posts are stored in Firebase Firestore. Readers can comment below.</p>
+    </section>
+
+    <!-- Gallery -->
+    <section class="card">
+      <h2>Community Posts</h2>
+      <div id="gallery" class="gallery"></div>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast">Saved</div>
+
+<!-- Firebase + App -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDcNe6vPseTeBzmfEgE9c-4S--kLnlA-B0",
+  authDomain: "form-feminine.firebaseapp.com",
+  projectId: "form-feminine",
+  storageBucket: "form-feminine.firebasestorage.app",
+  messagingSenderId: "504633454817",
+  appId: "1:504633454817:web:9832477ddc1a1dcb9307a0",
+  measurementId: "G-49VMKM64ZX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const toast = document.getElementById('toast');
+
+function showToast(msg='Saved'){ 
+  toast.textContent = msg; 
+  toast.classList.add('show'); 
+  setTimeout(()=>toast.classList.remove('show'),1400); 
+}
+
+const gallery = document.getElementById('gallery');
+const form = document.getElementById('uploadForm');
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const name = document.getElementById('uName').value.trim();
+  const text = document.getElementById('uText').value.trim();
+  if(!text) return;
+
+  await addDoc(collection(db,'community'),{
+    name, text, timestamp: serverTimestamp()
+  });
+
+  form.reset();
+  showToast('Post published');
+  loadGallery();
+});
+
+function tileEl(id,data){
+  const who = data.name?.trim() ? data.name.trim() : 'Anonymous';
+  const wrap = document.createElement('div');
+  wrap.className='tile';
+  wrap.innerHTML=`
+    <div class="meta">
+      <div class="small">by ${who}</div>
+      <div class="cap">${(data.text||'').replace(/</g,'&lt;')}</div>
+      <div class="comments" id="cwrap-${id}">
+        <h4 style="margin:8px 0 4px">Comments</h4>
+        <div class="comment-list"></div>
+        <form class="cform" data-id="${id}" style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px">
+          <input type="text" name="name" placeholder="Your name (optional)">
+          <input type="text" name="text" placeholder="Say something…" required>
+          <button type="submit" style="grid-column:1 / -1">Comment</button>
+        </form>
+      </div>
+    </div>
+  `;
+  return wrap;
+}
+
+async function loadComments(postId,listNode){
+  const { getDocs, collection, orderBy, query } = await import("https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js");
+  const q = query(collection(db,'community',postId,'comments'),orderBy('timestamp','asc'));
+  const snap = await getDocs(q);
+  listNode.innerHTML='';
+  snap.forEach(c=>{
+    const v=c.data();
+    const div=document.createElement('div');
+    div.className='comment';
+    const who = v.name?.trim() ? v.name.trim() : 'Guest';
+    div.textContent = `${who}: ${v.text||''}`;
+    listNode.appendChild(div);
+  });
+}
+
+function wireCommentForm(form){
+  form.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const id=form.dataset.id;
+    const name=form.querySelector('[name="name"]').value.trim();
+    const text=form.querySelector('[name="text"]').value.trim();
+    if(!text) return;
+    await addDoc(collection(db,'community',id,'comments'),{
+      name,text,timestamp:serverTimestamp()
+    });
+    form.reset();
+    const list=form.parentElement.querySelector('.comment-list');
+    await loadComments(id,list);
+    showToast('Comment added');
+  });
+}
+
+async function loadGallery(){
+  gallery.innerHTML='';
+  const q=query(collection(db,'community'),orderBy('timestamp','desc'));
+  const snap=await getDocs(q);
+  const items=[];
+  snap.forEach(d=>items.push({id:d.id,data:d.data()}));
+  for(const {id,data} of items){
+    const el=tileEl(id,data);
+    gallery.appendChild(el);
+    await loadComments(id,el.querySelector('.comment-list'));
+    wireCommentForm(el.querySelector('.cform'));
+  }
+}
+
+loadGallery();
+</script>
+</body>
+</html>

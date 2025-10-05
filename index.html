@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form & Feminine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* --- General --- */
+body { font-family: 'Inter', sans-serif; background: #FAF5F7; color: #2D2D2D; margin:0; scroll-behavior: smooth; }
+h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+a { text-decoration: none; color: inherit; transition: color 0.3s; }
+nav { background: #fff; padding: 16px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: fixed; top: 0; width: 100%; z-index: 100; }
+nav .container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+nav ul { display: flex; gap: 24px; list-style: none; }
+nav li a:hover { color: #B08BB0; }
+nav img.logo { height: 50px; border-radius: 8px; }
+
+/* Hero */
+.hero { text-align: center; padding: 120px 24px 80px; background: linear-gradient(135deg,#FAD0C4,#FFD1FF); overflow: hidden; }
+.hero h1 { font-size: 3rem; margin-bottom: 16px; color: #6B4B8A; }
+.hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 32px; }
+.hero img { max-width: 600px; width: 100%; border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 1s; }
+
+/* Highlights Section */
+#highlights { text-align:center; padding:80px 24px; background:#fff; }
+#highlights h2 { font-size:2.5rem; color:#6B4B8A; margin-bottom:16px; }
+#highlights p { max-width:700px; margin:0 auto 40px; font-size:1.1rem; color:#4D4D4D; }
+#highlights .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:40px; }
+#highlights .card { flex:1; min-width:220px; max-width:280px; text-align:center; padding:24px; border-radius:16px; background:#FAF5F7; box-shadow:0 6px 20px rgba(0,0,0,0.08); transition: transform 0.3s; cursor:pointer; }
+#highlights .card i { font-size:3rem; color:#B08BB0; margin-bottom:16px; }
+#highlights .card:hover { transform: translateY(-10px) scale(1.03); }
+
+/* Blog Section */
+#blog { padding:80px 24px; text-align:center; }
+#blog h2 { font-size:2.5rem; color:#6B4B8A; margin-bottom:16px; }
+#blog p { max-width:700px; margin:0 auto 40px; font-size:1.1rem; color:#4D4D4D; }
+#blog .post-card { flex:1; min-width:220px; max-width:280px; text-align:center; padding:24px; border-radius:16px; background:#FAF5F7; box-shadow:0 6px 20px rgba(0,0,0,0.08); margin:12px; cursor:pointer; transition: transform 0.3s; display:inline-block; }
+#blog .post-card:hover { transform: translateY(-8px) scale(1.02); }
+
+/* Architects Section */
+#architects { padding:80px 24px; text-align:center; background:#fff; }
+#architects h2 { font-size:2.5rem; color:#6B4B8A; margin-bottom:16px; }
+#architects p { max-width:700px; margin:0 auto 40px; font-size:1.1rem; color:#4D4D4D; }
+#architects .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:40px; }
+#architects .card { flex:1; min-width:220px; max-width:280px; text-align:center; padding:24px; border-radius:16px; background:#FAF5F7; box-shadow:0 6px 20px rgba(0,0,0,0.08); cursor:pointer; transition: transform 0.3s; }
+#architects .card img { width:100%; border-radius:12px; margin-bottom:12px; }
+#architects .card:hover { transform: translateY(-10px) scale(1.03); }
+
+/* About Section */
+#about { padding:80px 24px; background:#fff; text-align:center; }
+#about h2 { font-size:2.5rem; color:#6B4B8A; margin-bottom:16px; }
+#about p { max-width:700px; margin:0 auto 16px; font-size:1.1rem; color:#4D4D4D; }
+
+/* Footer */
+footer { background: #2D2D2D; color: #fff; padding: 64px 24px; text-align:center; }
+footer a { color: #fff; }
+footer a:hover { color: #D8B4D6; }
+footer .bottom { margin-top: 32px; font-size: 0.85rem; color: #aaa; }
+
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="container">
+    <a href="#hero"><img class="logo" src="https://mocha-cdn.com/0198fd66-d2c5-7273-b090-41fdbbdca766/IMG_8854.jpeg" alt="Form & Feminine Logo"></a>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#highlights">Highlights</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#architects">Architects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <h1>Form & Feminine</h1>
+  <p>Exploring the intersection of femininity and architecture. Empowering women to shape the future of design.</p>
+  <img src="https://mocha-cdn.com/0198fd66-d2c5-7273-b090-41fdbbdca766/IMG_8854.jpeg" alt="Inspiration Image">
+</section>
+
+<!-- Highlights Section -->
+<section id="highlights">
+  <h2>Shaping Tomorrow's Design</h2>
+  <p>Through feminine perspectives, we're reimagining how architecture and design can create more inclusive, nurturing, and beautiful spaces.</p>
+  <div class="cards">
+    <div class="card" onclick="window.location.href='design.html';">
+      <i class="fas fa-pencil-ruler"></i>
+      <h3>Design Sketches</h3>
+      <p>Creative drawings and architectural concepts that showcase innovative approaches to space, form, and human experience.</p>
+    </div>
+    <div class="card" onclick="window.location.href='community.html';">
+      <i class="fas fa-users"></i>
+      <h3>Community Voice</h3>
+      <p>Amplifying women's voices in architecture and design, creating space for dialogue about the future of our built environment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Section -->
+<section id="blog">
+  <h2>Our Blog</h2>
+  <p>Explore articles and posts that share insights, ideas, and inspiration at the intersection of femininity and design. Learn how women are shaping spaces of the future.</p>
+  <div class="post-card" onclick="window.location.href='blog1.html';">
+    <h3>Welcome to Our Blog</h3>
+    <p>Introductory post about Form & Feminine’s mission and vision.</p>
+  </div>
+</section>
+
+<!-- Architects Section -->
+<section id="architects">
+  <h2>Architectural Inspirations</h2>
+  <p>Explore the lives and works of pioneering women architects who shaped the course of design history.</p>
+  <div class="cards">
+    <!-- Architect Cards (unchanged) -->
+    <div class="card" onclick="window.location.href='zaha.html';">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Zaha_Hadid_in_Heydar_Aliyev_Cultural_center_in_Baku_nov_2013.jpg/250px-Zaha_Hadid_in_Heydar_Aliyev_Cultural_center_in_Baku_nov_2013.jpg" alt="">
+      <h3>Zaha Hadid</h3>
+      <p>Known for her futuristic designs and radical deconstructivist style.</p>
+    </div>
+    <div class="card" onclick="window.location.href='lina.html';">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Lina_Bo_Bardi.jpg" alt="Lina Bo Bardi">
+      <h3>Lina Bo Bardi</h3>
+      <p>Celebrated for integrating modern architecture with cultural context.</p>
+    </div>
+    <div class="card" onclick="window.location.href='jeanne.html';">
+      <img src="https://studiogang.com/wp-content/uploads/20240430Jeanne-Gang_Portrait_002_cJohn-David-Pittman-596x477.jpg" alt="Jeanne Gang">
+      <h3>Jeanne Gang</h3>
+      <p>Founder of Studio Gang, known for socially conscious urban design.</p>
+    </div>
+    <!-- (Other architect cards remain unchanged) -->
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+  <h2>About Form & Feminine</h2>
+  <p>Founded by Niyana Abraham in 2025, Form & Feminine celebrates how women can express their creativity and influence architecture with empathy and elegance.</p>
+  <p>We share essays, and community insights that explore the intersection of femininity and design.</p>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:niyana.abraham801@gmail.com">niyana.abraham801@gmail.com</a></p>
+  <p>Location: Addis Ababa, Ethiopia</p>
+  <p>Follow us on <a href="https://www.instagram.com/form_feminine" target="_blank">Instagram</a> and <a href="https://www.tiktok.com/@form_feminine" target="_blank">TikTok</a></p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 Form & Feminine. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+

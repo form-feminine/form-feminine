@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form & Feminine Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:'Inter', sans-serif; background:#FAF5F7; color:#2D2D2D; margin:0; padding:24px; }
+    h1,h2,h3,h4 { font-family:'Playfair Display', serif; color:#6B4B8A; }
+    .container { max-width:1000px; margin:0 auto; padding:40px 20px; }
+    a { color:#B08BB0; text-decoration:none; }
+    a:hover { color:#6B4B8A; }
+    .back { margin-bottom:20px; display:inline-block; font-weight:600; }
+
+    input, textarea, button { width:100%; padding:12px; margin:6px 0 16px; border-radius:8px; border:1px solid #ccc; font-size:1rem; }
+    button { background:#B08BB0; color:#fff; border:none; cursor:pointer; font-size:1rem; }
+    button:hover { background:#6B4B8A; }
+
+    .blogCard { background:#fff; padding:16px; margin-bottom:16px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    #commentsList li { background:#fff; padding:10px; margin:6px 0; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); list-style:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="index.html">&larr; Back to Home</a>
+    <h1>Form & Feminine Blog</h1>
+
+    <p>Welcome to our blog! Here we celebrate how feminine perspectives can influence architecture and design for a more inclusive future.</p>
+
+    <!-- Blog Form -->
+    <h2>Post a Blog</h2>
+    <form id="blogForm">
+      <input type="text" id="blogTitle" placeholder="Blog Title" required>
+      <textarea id="blogContent" placeholder="Write your blog here..." rows="6" required></textarea>
+      <button type="submit">Post</button>
+    </form>
+
+    <!-- Blog Display -->
+    <h2>All Blogs</h2>
+    <div id="blogPosts"></div>
+
+    <!-- Comments Section -->
+    <h2>Comments</h2>
+    <form id="commentForm">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <textarea id="comment" placeholder="Write your comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+    <ul id="commentsList"></ul>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcNe6vPseTeBzmfEgE9c-4S--kLnlA-B0",
+      authDomain: "form-feminine.firebaseapp.com",
+      projectId: "form-feminine",
+      storageBucket: "form-feminine.firebasestorage.app",
+      messagingSenderId: "504633454817",
+      appId: "1:504633454817:web:9832477ddc1a1dcb9307a0",
+      measurementId: "G-49VMKM64ZX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ================== BLOG FUNCTIONS ==================
+    const blogForm = document.getElementById("blogForm");
+    const blogPosts = document.getElementById("blogPosts");
+
+    blogForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("blogTitle").value.trim();
+      const content = document.getElementById("blogContent").value.trim();
+
+      if (title && content) {
+        await addDoc(collection(db, "blogs"), {
+          title,
+          content,
+          timestamp: new Date()
+        });
+        blogForm.reset();
+        loadBlogs();
+      }
+    });
+
+    async function loadBlogs() {
+      blogPosts.innerHTML = "";
+      const q = query(collection(db, "blogs"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const blogDiv = document.createElement("div");
+        blogDiv.className = "blogCard";
+        blogDiv.innerHTML = `<h3>${data.title}</h3><p>${data.content}</p>`;
+        blogPosts.appendChild(blogDiv);
+      });
+    }
+
+    // ================== COMMENT FUNCTIONS ==================
+    const commentForm = document.getElementById("commentForm");
+    const commentsList = document.getElementById("commentsList");
+
+    commentForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const comment = document.getElementById("comment").value.trim();
+
+      if (name && comment) {
+        await addDoc(collection(db, "comments"), {
+          name,
+          comment,
+          timestamp: new Date()
+        });
+        commentForm.reset();
+        loadComments();
+      }
+    });
+
+    async function loadComments() {
+      commentsList.innerHTML = "";
+      const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `${data.name}: ${data.comment}`;
+        commentsList.appendChild(li);
+      });
+    }
+
+    // ================== LOAD DATA ON START ==================
+    window.addEventListener("DOMContentLoaded", () => {
+      loadBlogs();
+      loadComments();
+    });
+  </script>
+</body>
+</html>
